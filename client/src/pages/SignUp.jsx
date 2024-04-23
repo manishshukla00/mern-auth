@@ -2,10 +2,12 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [formData, setFormdata] = useState({});
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormdata({ ...formData, [e.target.id]: e.target.value });
@@ -23,6 +25,7 @@ const SignUp = () => {
       if (res.data.success === true) {
         toast.success(res.data.message);
         setLoading(false);
+        navigate("/signin");
       }
       if (res.data.success === false) {
         toast.error("Something went wrong !!");
