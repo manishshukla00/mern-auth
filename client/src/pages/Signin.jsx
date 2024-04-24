@@ -3,11 +3,18 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import {
+  signinStart,
+  signinSuccess,
+  signinFailure,
+} from "../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const SignUp = () => {
   const [formData, setFormdata] = useState({});
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormdata({ ...formData, [e.target.id]: e.target.value });
@@ -16,7 +23,8 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      // setLoading(true);
+      dispatch(signinStart);
       const res = await axios.post(
         "http://localhost:3000/api/auth/signin",
         formData
@@ -24,15 +32,16 @@ const SignUp = () => {
       console.log(res);
       if (res.data.success === true) {
         toast.success(res.data.message);
-        setLoading(false);
+        dispatch(signinSuccess(res.data));
         navigate("/");
       }
       if (res.data.success === false) {
-        setLoading(false);
+        dispatch(signinFailure(res.data));
         toast.error(res.data.message);
       }
     } catch (error) {
-      setLoading(false);
+      // setLoading(false);
+      dispatch(signinFailure(error));
       toast.error("Something went wrong !!");
     }
   };
