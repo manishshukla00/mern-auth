@@ -22,8 +22,7 @@ const Oauth = () => {
         "http://localhost:3000/api/auth/google",
         googleData
       );
-      console.log(res);
-      dispatch(signinSuccess(res.data));
+      dispatch(signinSuccess(res.data.newUser));
     } catch (error) {
       console.log(error.message);
     }

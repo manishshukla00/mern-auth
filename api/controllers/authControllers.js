@@ -76,9 +76,7 @@ export const google = async (req, res, next) => {
         expires: expiryDate,
       });
       await newUser.save();
-      res
-        .status(200)
-        .json({ message: "User Created Successfully", user, newUser });
+      res.status(200).json({ message: "User Created Successfully", newUser });
     }
   } catch (error) {
     console.log(error);
