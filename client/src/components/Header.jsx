@@ -5,6 +5,9 @@ import { useSelector } from "react-redux";
 const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
 
+  const imageUrl =
+    "https://e7.pngegg.com/pngimages/81/570/png-clipart-profile-logo-computer-icons-user-user-blue-heroes-thumbnail.png";
+
   return (
     <div className="bg-slate-200">
       <div className="max-w-6xl mx-auto flex justify-between items-center p-4">
@@ -22,7 +25,7 @@ const Header = () => {
             {currentUser ? (
               <img
                 className="w-8 h-8 rounded-full object-cover"
-                src={currentUser.profilePicture}
+                src={currentUser.profilePicture || imageUrl}
                 alt="user-image"
               />
             ) : (
