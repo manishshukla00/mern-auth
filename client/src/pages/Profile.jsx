@@ -8,13 +8,16 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import { useDispatch } from "react-redux";
+import { signout } from "../redux/user/userSlice";
+import axios from "axios";
 
 const Profile = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [image, setImage] = useState(undefined);
   const [formData, setFormData] = useState({});
   const fileRef = useRef(null);
-  console.log(formData);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (image) {
@@ -34,6 +37,19 @@ const Profile = () => {
     });
   };
 
+  const handleSignout = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/api/auth/signout");
+      console.log(res);
+      dispatch(signout());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const imageUrl =
+    "https://e7.pngegg.com/pngimages/81/570/png-clipart-profile-logo-computer-icons-user-user-blue-heroes-thumbnail.png";
+
   return (
     <div className="max-w-lg mx-auto font-semibold text-center p-4">
       <h1 className="text-4xl my-4">Profile</h1>
@@ -46,7 +62,7 @@ const Profile = () => {
           hidden
         />
         <img
-          src={currentUser.profilePicture}
+          src={currentUser.profilePicture || imageUrl}
           alt="profile"
           className="w-20 h-20 self-center cursor-pointer rounded-full object-cover my-4"
           onClick={() => fileRef.current.click()}
@@ -77,7 +93,9 @@ const Profile = () => {
       </form>
       <div className="flex justify-between items-center mt-4">
         <span className="text-red-800 cursor-pointer">Delete Account</span>
-        <span className="text-red-800 cursor-pointer">Signout</span>
+        <span onClick={handleSignout} className="text-red-800 cursor-pointer">
+          Signout
+        </span>
       </div>
     </div>
   );
